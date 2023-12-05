@@ -2,32 +2,49 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHECKERS</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHECKERS</title>
 <style>
 body , html{
 transition: 1s ease-in-out;
 width: 100%;
 height : 100%;
+background-image:url("https://static.vecteezy.com/system/resources/previews/002/202/156/original/flat-cartoon-wood-background-free-vector.jpg");
 margin : 0 0;
 padding: 0 0;
-background-image:url("https://static.vecteezy.com/system/resources/previews/002/202/156/original/flat-cartoon-wood-background-free-vector.jpg");
+
 }
 img{
-    max-width: 150px;
-    max-height: 150px;
-    display: block;
-  margin-left: left;
-  margin-right: left;
-  width: 5%;
+max-width: 150px;
+max-height: 150px;
+display: block;
+margin-left: left;
+margin-right: left;
+width: 5%;
 }
 .square{
 float: left;
 width: 80px;
 height: 80px;
 }
-
+.button{
+background-color: White; 
+  border: none;
+  color: white;
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+.button:hover{
+    background-color:red;
+    color:white;
+}
 .white_square{
 background-color:#F0D2B4;
 }
@@ -68,6 +85,11 @@ font-family: Calibri, Candara, Segoe, 'Segoe UI', Optima, Arial, sans-serif;
 -moz-transition: 5s ease-in-out;
 -o-transition: 5s ease-in-out;
 transition: 5s ease-in-out;
+}
+.button{
+color: red;
+padding: 8px 22px;
+border-radius: 6px;
 }
 
 .checker{
@@ -123,13 +145,14 @@ height: 50px;
 width: 32px;
 height: 32px;
 }
+
 }
 
 </style>
 </head>
 <body id="ht">
-    
-    <img src="https://logodix.com/logo/1261253.png">
+
+<img src="https://logodix.com/logo/1261253.png">
 
 <div class="checker white_checker" style="display:none"> </div>
 <div class="checker black_checker" style="display:none"> </div>
@@ -250,62 +273,108 @@ height: 32px;
 <div class="square black_square"> </div>
 <div class="clear_float"> </div>
 
+<div class="score" id="score"><br>
 </div>
 
+<button class="button"id="restartButton">Restart Game</button>
+
 <script>
-// Your existing code here...
 
-        // Function to determine who moves first
-        function determineFirstMove() {
-            return Math.random() < 0.5 ? 'Blue' : 'grey';
-        }
+var blueScore = 0;
+    var greyScore = 0;
 
-        // Function to determine who moves next
-        function determineNextMove(currentMove) {
-            return currentMove === 'Blue' ? 'Grey' : 'Blue';
-        }
+    function updateScores() {
+      document.getElementById('score').innerText = 'Blue: ' + blueScore + ' - Grey: ' + greyScore;
+    }
 
-        // Function to check if the game is over
-        function checkIfGameOver() {
-            // Your game-over logic here
-            return false; // Replace with your condition
-        }
+    function declareWinner() {
+      playSound(winSound);
+      black_background.style.display = 'inline';
+      score.style.display = 'block';
 
-        // Function to declare the winner
-        function declareWinner() {
-            playSound(winSound);
-            black_background.style.display = 'inline';
-            score.style.display = 'block';
+      if (the_checker[1].color === 'Blue') {
+        score.innerHTML = 'Blue wins';
+        blueScore++;
+      } else {
+        score.innerHTML = 'Grey wins';
+        greyScore++;
+      }
 
-            if (the_checker[1].color === 'Blue') {
-                score.innerHTML = 'Grey wins';
-            } else {
-                score.innerHTML = 'Blue wins';
-            }
-        }
+      updateScores();
 
-        // Main function to handle moves
-        function handleMove(index) {
-            var currentMove = the_checker[1].color;
+      document.getElementById('blue-score').innerText = 'Blue: ' + blueScore;
+      document.getElementById('grey-score').innerText = 'Grey: ' + greyScore;
+    }
 
-            if (showMoves(the_checker[selectedPieceindex].id)) {
-                makeMove(index);
-                if (checkIfGameOver()) {
-                    setTimeout(declareWinner, 3000);
-                    return;
-                }
-                changeTurns(the_checker[1]);
-                var nextMove = determineNextMove(currentMove);
-                alert('Next move: ' + nextMove);
-            }
-        }
+    function restartGame() {
+      location.reload();
+    }
 
-        // Determine the first move and alert
-        var firstMove = determineFirstMove();
-        alert('First move: ' + firstMove);
+    var restartButton = document.getElementById("restartButton");
+    restartButton.addEventListener("click", restartGame);
 
-        // Initial move indication
-        alert('Current move: ' + firstMove);
+function declareWinner() {
+playSound(winSound);
+black_background.style.display = 'inline';
+score.style.display = 'block';
+
+if (the_checker[1].color === 'Blue') {
+score.innerHTML = 'Grey wins';
+greyScore++;
+} else {
+score.innerHTML = 'Blue wins';
+blueScore++;
+}
+
+document.getElementById('blue-score').innerText = 'Blue: ' + blueScore;
+document.getElementById('grey-score').innerText = 'Grey: ' + greyScore;
+}
+
+function determineFirstMove() {
+return Math.random() < 0.5 ? 'Blue' : 'grey';
+}
+
+function determineNextMove(currentMove) {
+return currentMove === 'Blue' ? 'Grey' : 'Blue';
+}
+
+
+function checkIfGameOver() {
+return false;
+}
+
+
+function declareWinner() {
+playSound(winSound);
+black_background.style.display = 'inline';
+score.style.display = 'block';
+
+if (the_checker[1].color === 'Blue') {
+score.innerHTML = 'Grey wins';
+} else {
+score.innerHTML = 'Blue wins';
+}
+}
+
+function handleMove(index) {
+var currentMove = the_checker[1].color;
+
+if (showMoves(the_checker[selectedPieceindex].id)) {
+makeMove(index);
+if (checkIfGameOver()) {
+setTimeout(declareWinner, 3000);
+return;
+}
+changeTurns(the_checker[1]);
+var nextMove = determineNextMove(currentMove);
+alert('Next move: ' + nextMove);
+}
+}
+
+var firstMove = determineFirstMove();
+alert('First move: ' + firstMove);
+
+alert('Current move: ' + firstMove);
 var square_class = document.getElementsByClassName("square");
 var white_checker_class = document.getElementsByClassName("white_checker");
 var black_checker_class = document.getElementsByClassName("black_checker");
@@ -763,10 +832,11 @@ black_background.style.display = "inline";
 score.style.display = "block";
 0
 if(the_checker[1].color == "white")
-score.innerHTML = "Black wins";
+score.innerHTML = "Grey Wins";
 else
-score.innerHTML = "Red wins";
+score.innerHTML = "Blue Wins";
 }
+
 
 function playSound(sound){
 if(sound) sound.play();
